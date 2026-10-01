@@ -1,0 +1,8 @@
+ClearSpace UI update - verified 2026-10-02
+Compiled successfully with the Windows .NET Framework C# compiler.
+Original cleaning engine verified identical to the previous build.
+Rendered and visually inspected the dashboard, compact layout, file preview and confirmation.
+No real cache files were deleted. Deletion tests used workspace fixtures.
+
+PASS: real read-only scan; action enablement; checkbox deselection; age change invalidates scan; full and compact layout; preview and confirmation rendering. No real files deleted.
+PASS: age filtering; path boundary; sibling paths; changed-file protection; locked-file protection; personal-file preservation; forged-root rejection; scan and clean cancellation; running-process exclusions; hardlink protection; junction protection.
