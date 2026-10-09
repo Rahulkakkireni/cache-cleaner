@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="{491ED03A-3EB3-4175-BEF9-DC652A637199}" Name="ClearSpace" Language="1033" Version="1.4.3" Manufacturer="Rahul Kakkireni" UpgradeCode="{9B8766F2-1980-484E-8CBF-4D741D97F525}">
+    <Package InstallerVersion="500" Compressed="yes" InstallScope="perUser" Description="ClearSpace Windows cache cleaner - Made by Rahul Kakkireni" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of ClearSpace is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+    <Property Id="ARPPRODUCTICON" Value="ClearSpace.exe" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.SourceDir)\License.rtf" />
+    <UIRef Id="WixUI_InstallDir" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="LocalAppDataFolder">
+          <Directory Id="INSTALLFOLDER" Name="ClearSpace">
+            <Component Id="ApplicationFiles" Guid="{A9C2F29D-AD29-46D6-88A6-FBF2665F0DF1}">
+              <File Id="ClearSpace.exe" Source="$(var.SourceDir)\ClearSpace.exe">
+                <Shortcut Id="ApplicationStartMenuShortcut" Directory="ApplicationProgramsFolder" Name="ClearSpace" WorkingDirectory="INSTALLFOLDER" Advertise="no" />
+              </File>
+              <File Id="README.txt" Source="$(var.SourceDir)\README.txt" />
+              <File Id="CacheCleaner.cs" Source="$(var.SourceDir)\CacheCleaner.cs" />
+              <File Id="Frontend.cs" Source="$(var.SourceDir)\Frontend.cs" />
+              <File Id="build.ps1" Source="$(var.SourceDir)\build.ps1" />
+              <RegistryValue Root="HKCU" Key="Software\ClearSpace" Name="InstallPath" Type="string" Value="[INSTALLFOLDER]" KeyPath="yes" />
+              <RemoveFolder Id="RemoveInstallFolder" Directory="INSTALLFOLDER" On="uninstall" />
+            </Component>
+          </Directory>
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="ClearSpace">
+          <Component Id="StartMenuFolder" Guid="{E74858A8-47B1-45CB-88E2-41EBB8504C75}">
+            <RemoveFolder Id="RemoveApplicationProgramsFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
+            <RegistryValue Root="HKCU" Key="Software\ClearSpace" Name="Installed" Type="integer" Value="1" KeyPath="yes" />
+          </Component>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <Feature Id="ProductFeature" Title="ClearSpace" Level="1">
+      <ComponentRef Id="ApplicationFiles" />
+      <ComponentRef Id="StartMenuFolder" />
+    </Feature>
+  </Product>
+</Wix>

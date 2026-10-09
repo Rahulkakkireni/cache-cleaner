@@ -1,8 +1,46 @@
-ClearSpace UI update - verified 2026-10-02
-Compiled successfully with the Windows .NET Framework C# compiler.
-Original cleaning engine verified identical to the previous build.
-Rendered and visually inspected the dashboard, compact layout, file preview and confirmation.
-No real cache files were deleted. Deletion tests used workspace fixtures.
+ClearSpace 1.4.3 - verification results - 2026-10-10
 
-PASS: real read-only scan; action enablement; checkbox deselection; age change invalidates scan; full and compact layout; preview and confirmation rendering. No real files deleted.
-PASS: age filtering; path boundary; sibling paths; changed-file protection; locked-file protection; personal-file preservation; forged-root rejection; scan and clean cancellation; running-process exclusions; hardlink protection; junction protection.
+Build and scan
+- Compiled successfully with the Windows .NET Framework C# compiler.
+- UI smoke test passed: full/compact layouts, selection state, preview and
+  confirmation dialogs rendered after a real read-only scan.
+- Read-only Any age scan completed with exit code 0; no real cache files were deleted.
+- Current scan found 147 user-temp files (319.1 MB), 82 Windows-temp files
+  (14.9 MB), 149 Windows/app-cache files (50.5 MB), 13,771 Chrome files
+  (2.2 GB), 923 Edge files (249.7 MB), 6,649 Brave files (816.1 MB), and
+  3 Windows Update download files (15.0 MB).
+- Chrome and Brave were open. Their unlocked cache files remain eligible while
+  locked files are reported and skipped during cleaning.
+
+Expanded browser coverage
+- Chrome, Edge, Brave, Vivaldi, Chromium, Yandex, Opera, Opera GX and Firefox.
+- Chromium Cache/Cache_Data, Code Cache, GPUCache, Dawn, media, network,
+  service-worker CacheStorage and ScriptCache, and shared cache stores.
+- Firefox cache2, startupCache, shader-cache and thumbnails across profiles.
+- Cookies, history, passwords, downloads and packaged-app LocalCache are excluded.
+
+Safety tests
+- Exit code 0: age filters, Any age, dynamic paths and 8.3 normalization.
+- Chromium and Firefox multi-profile discovery, including media/network/service-worker caches.
+- Open-browser cleaning with locked-file skipping.
+- Changed, linked, hardlinked, forged-root and out-of-boundary files stay protected.
+- Cancellation and Windows Update service restoration pass on success and failure.
+
+Installer
+- ClearSpace-Setup-1.4.3.msi reports ProductVersion 1.4.3, identifies the
+  manufacturer as Rahul Kakkireni, and retains the
+  established UpgradeCode for upgrades from earlier releases.
+- Added a visible Windows Installer wizard with welcome, license, destination,
+  progress and completion screens; the Dialog, Control and InstallUISequence
+  tables are present.
+- Upgrade from the installed 1.4.2 release completed with exit code 0.
+- Final-package uninstall removed the executable and Start Menu shortcut with
+  exit code 0; a subsequent clean install recreated both with exit code 0.
+- The installed executable reports version 1.4.3.0 and matches the source build.
+- The header visibly renders the small title "Made by Rahul Kakkireni".
+- Installed-app UI smoke passed after a real read-only scan, including action
+  state, full/compact layouts, preview and confirmation rendering.
+- Administrative extraction exited 0.
+- Embedded ClearSpace.exe SHA-256 exactly matches the tested build.
+- MSI SHA-256: D43BFE4A96FC0541BAB077F84750D70887E41832AA65363292DEB943850896B8
+- MSI size: 344,064 bytes. This local build is unsigned.

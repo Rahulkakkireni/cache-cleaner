@@ -1,34 +1,61 @@
-ClearSpace - Windows Cache Cleaner
+ClearSpace 1.4.3 - Windows Cache Cleaner
 
-Open ClearSpace.exe. No installer, network connection or administrator access is needed.
-1. Choose a minimum file age (24 hours, 7 days, or 30 days).
-2. Click Scan PC. Scanning does not delete anything.
-3. Select the locations to clean and use Preview files to inspect them.
-4. Click Clean selected and confirm the permanent deletion.
+Made by Rahul Kakkireni
 
-Locations: your LocalAppData Temp folder, accessible Windows Temp files,
-and Chrome/Edge Default and Profile folders' Cache_Data, Code Cache and GPUCache.
-Close Chrome/Edge completely before scanning their cache. Background browser
-processes also cause that browser category to be skipped.
+Install ClearSpace-Setup-1.4.3.msi to upgrade an earlier version, or run ClearSpace.exe.
 
-Files created or changed recently, junctions/symbolic links, files modified since
-the scan, locked files and inaccessible files are skipped. No folders are deleted.
-Downloads, Documents, photos, Recycle Bin, cookies, passwords, browsing history,
-registry, Windows Update data and Prefetch are not cleaning targets.
+1. Click Run as administrator for Windows Temp and Windows Update downloads.
+   Approve the Windows UAC prompt using the same Windows account.
+2. Chrome, Edge, Brave, Vivaldi, Chromium, Yandex, Opera, Opera GX and Firefox
+   cache can be scanned and cleaned while browsers are open.
+   Files currently in use are safely skipped; close the browser to clean those too.
+3. Choose 24 hours, 7 days, 30 days, or Any age, then click Scan PC.
+   Any age includes recent files. Locked, linked and changed files remain protected.
+4. Select locations, review Preview selected files, then click Clean selected.
+   Windows Update downloads are not selected automatically.
+5. Use Paths & skipped files for actual folder paths and detailed skip reasons.
 
-Deleted files cannot be restored through this application. Apps may rebuild
-their caches, and the next load may be slower. Reported space is file size;
+Supported locations:
+- The installing user's LocalAppData Temp folder and configured LocalAppData
+  Temp/Tmp folder, discovered dynamically from Windows. Windows 8.3 aliases are
+  normalized to the current user's full path; no specific user name is built in.
+- Windows\Temp.
+- Chromium-family profile Cache (including Cache_Data), Code Cache, GPUCache,
+  Dawn, media, network, service-worker script and CacheStorage folders, plus
+  shared shader/component caches. Chrome, Edge, Brave, Vivaldi, Chromium,
+  Yandex, Opera and Opera GX locations are discovered dynamically.
+- Firefox cache2, startup, shader and thumbnail cache folders across profiles.
+- Windows web, thumbnail and DirectX shader caches, plus packaged-app TempState
+  and INetCache folders. Packaged-app LocalCache is excluded because apps may
+  keep durable account or working data there despite the folder name.
+- Windows\SoftwareDistribution\Download only.
+
+Windows Update cleanup:
+Administrator access is required. The confirmation explains that BITS and Windows
+Update services will be stopped temporarily. Only services stopped by ClearSpace
+are restarted afterward, including after cancellation or a handled failure.
+Cleanup is skipped during active Windows servicing or a pending update restart.
+If services restart during cleaning, remaining update files are skipped.
+Restart failures appear in the results and require attention.
+Update packages may need downloading again. Update history, DataStore, WinSxS,
+installed updates, delivery optimization storage, and catroot2 are excluded.
+
+Documents, photos, user Downloads, cookies, passwords, browsing history,
+Recycle Bin, registry cleaning and Prefetch are not cleaning targets.
+No directories are deleted. Some empty cache folders may remain.
+Files changed since scanning, hardlinks, symbolic links, junctions, locked files,
+and inaccessible files are skipped. Reported space is the size of deleted files;
 actual free disk space can differ with compression or concurrent disk activity.
-Cancellation stops after the current file. It does not undo completed deletions.
+Deletion is permanent. Cancellation does not undo completed deletions.
 
-Portable application for Windows with .NET Framework 4.x (built into Windows 10/11).
-This local build is unsigned. Keep the entire folder if you want the source.
+Windows 10/11 with .NET Framework 4.5 or later. This local build is unsigned.
+The app operates locally and does not upload scan results.
 
-Build source using Windows' included .NET Framework compiler:
-C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe /target:winexe /out:ClearSpace.exe /reference:System.Windows.Forms.dll /reference:System.Drawing.dll /reference:System.Core.dll CacheCleaner.cs Frontend.cs
+Build with build.ps1, which uses Windows' .NET Framework C# compiler and references
+System.Windows.Forms, System.Drawing, System.Core and System.ServiceProcess.
+Frontend.cs contains the interface; CacheCleaner.cs contains the engine and tests.
 
-UI design adapted from the apple-design skill:
+Design reference:
 https://github.com/emilkowalski/skills/blob/main/skills/apple-design/SKILL.md
-Uses Windows system fonts, pale surfaces, rounded controls, immediate press feedback,
-keyboard focus cues, and native high-contrast colors. No decorative motion is used.
-Frontend.cs contains the interface; CacheCleaner.cs contains the cleaning engine.
+Windows Update service sequencing reference:
+https://learn.microsoft.com/en-us/troubleshoot/windows-client/installing-updates-features-roles/additional-resources-for-windows-update

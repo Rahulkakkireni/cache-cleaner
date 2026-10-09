@@ -1,0 +1,30 @@
+name: Build macOS DMG
+
+on:
+  push:
+    branches: [codex/macos-dmg]
+    paths:
+      - "macos/**"
+      - ".github/workflows/build-macos-dmg.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/macos-dmg
+      - name: Build and verify universal DMG
+        run: |
+          chmod +x macos/build-macos.sh
+          macos/build-macos.sh | tee macos-build-verification.txt
+      - name: Commit verified DMG
+        run: |
+          git config user.name "ClearSpace Build"
+          git config user.email "actions@users.noreply.github.com"
+          git add macos/dist/ClearSpace-macOS-1.0.0.dmg macos-build-verification.txt
+          git commit -m "Build verified macOS DMG [skip ci]"
+          git push origin HEAD:codex/macos-dmg
